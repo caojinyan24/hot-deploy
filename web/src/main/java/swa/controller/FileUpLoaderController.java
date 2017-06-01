@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableMap;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 import swa.service.DataStorer;
 
 import java.util.Map;
@@ -15,9 +16,12 @@ import java.util.Map;
 @RequestMapping("swa")
 public class FileUpLoaderController {
     @RequestMapping("upload")
-    public String uploadFile(@RequestParam("fileName") String fileName, @RequestParam("value") String value) {
-        DataStorer.setValue(fileName, ImmutableMap.of("1", value));
+    public ModelAndView uploadFile(@RequestParam("fileName") String fileName, @RequestParam("value") String value) {
+        ModelAndView modelAndView = new ModelAndView("index");
+        modelAndView.addObject("uploadedValue", value);
+        modelAndView.addObject("fileName", fileName);
+        DataStorer.setValue(fileName, ImmutableMap.of("testKey", value));
         System.out.println("store data:" + fileName + "##" + value);
-        return "index";
+        return modelAndView;
     }
 }
