@@ -11,11 +11,14 @@ import java.util.Map;
 public class DataStorer {
 
     public static Map getValue(String fileName) {
-        System.out.println("stored data:" + fileName);
-        return JSONObject.parseObject(RedisUtil.get(fileName), Map.class);
+        Map map = JSONObject.parseObject(RedisUtil.get(fileName), Map.class);
+        System.out.println("get data:fileName:" + fileName + "#value:" + map);
+        return map;
+
     }
 
     public static void setValue(String fileName, Map<String, String> value) {
+        System.out.println("stored data:fileName:" + fileName + "#value:" + value);
         RedisUtil.save(fileName, JSONObject.toJSONString(value));
     }
 }

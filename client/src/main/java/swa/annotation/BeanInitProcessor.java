@@ -3,6 +3,7 @@ package swa.annotation;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import swa.service.CallBackLoader;
+import swa.service.DataStorer;
 import swa.service.ListenerConfig;
 import swa.service.DataUpdater;
 
@@ -22,12 +23,14 @@ public class BeanInitProcessor implements BeanPostProcessor {
         Field[] fields = bean.getClass().getDeclaredFields();//只处理属性上的注解
         for (final Field field : fields) {
             if (field.getAnnotation(ValueSetter.class) != null) {
-                DataUpdater.addListener(new ListenerConfig("filename.properties", new CallBackLoader() {
+                String fileName = field.getAnnotation(ValueSetter.class).value();
+                DataUpdater.addListener(new ListenerConfig(fileName, new CallBackLoader() {
                     public void loadData(Map<String, String> value) {
                         setField(field, bean, value);
                     }
                 }));
-                setField(field, bean, null);
+                System.out.println("postProcessAfterInitialization" + DataStorer.getValue(fileName));
+                setField(field, bean, DataStorer.getValue(fileName));
             }
         }
         return bean;
