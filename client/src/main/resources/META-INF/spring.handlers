@@ -1,1 +1,1 @@
-http\://localhost/schema/qconfig=swa.annotation.ValueSetterNamespaceHandler
+http\://localhost/schema/valueSetter=swa.annotation.ValueSetterNamespaceHandler

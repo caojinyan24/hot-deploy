@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<xsd:schema xmlns="http://www.qunar.com/schema/qconfig"
+<xsd:schema xmlns="http://localhost/schema/valueSetter"
             xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-            targetNamespace="http://www.qunar.com/schema/qconfig"
+            targetNamespace="http://localhost/schema/valueSetter"
             elementFormDefault="qualified"
             attributeFormDefault="unqualified">
 
@@ -9,17 +9,17 @@
     <xsd:import namespace="http://www.springframework.org/schema/tool"/>
 
     <xsd:annotation>
-        <xsd:documentation><![CDATA[ Namespace support for the qconfig provided by Qunar. ]]></xsd:documentation>
+        <xsd:documentation><![CDATA[ .. ]]></xsd:documentation>
     </xsd:annotation>
 
     <xsd:element name="config">
         <xsd:annotation>
-            <xsd:documentation><![CDATA[ QConfig的配置节点 ]]></xsd:documentation>
+            <xsd:documentation><![CDATA[ .. ]]></xsd:documentation>
         </xsd:annotation>
         <xsd:complexType>
             <xsd:attribute name="files" type="xsd:string">
                 <xsd:annotation>
-                    <xsd:documentation><![CDATA[ 配置文件标识，可以用逗号分隔指定多个 ]]></xsd:documentation>
+                    <xsd:documentation><![CDATA[ .. ]]></xsd:documentation>
                 </xsd:annotation>
             </xsd:attribute>
             <xsd:attribute name="order" type="xsd:string" use="optional">
@@ -56,7 +56,7 @@
 
     <xsd:element name="annotation-driven">
         <xsd:annotation>
-            <xsd:documentation><![CDATA[ QConfig的配置节点 ]]></xsd:documentation>
+            <xsd:documentation><![CDATA[ .. ]]></xsd:documentation>
         </xsd:annotation>
     </xsd:element>
 </xsd:schema>
