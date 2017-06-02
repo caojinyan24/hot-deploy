@@ -1,6 +1,9 @@
 package swa.service;
 
+import com.alibaba.fastjson.JSONObject;
+
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
@@ -14,10 +17,12 @@ public class DataUpdater {
     }
 
     public static void setData(String fileName) {
+        System.out.println("DataUpdater.setData:" + fileName);
         for (ListenerConfig config : listenerConfigList) {
             if (config.getFileName().equals(fileName)) {
-                config.getLoader().loadData();
+                config.getLoader().loadData(JSONObject.parseObject(RedisUtil.get(fileName), Map.class));
             }
         }
     }
+
 }

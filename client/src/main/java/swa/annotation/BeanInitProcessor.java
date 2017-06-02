@@ -3,9 +3,8 @@ package swa.annotation;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import swa.service.CallBackLoader;
-import swa.service.DataStorer;
-import swa.service.DataUpdater;
 import swa.service.ListenerConfig;
+import swa.service.DataUpdater;
 
 import java.lang.reflect.Field;
 import java.util.Map;
@@ -24,11 +23,11 @@ public class BeanInitProcessor implements BeanPostProcessor {
         for (final Field field : fields) {
             if (field.getAnnotation(ValueSetter.class) != null) {
                 DataUpdater.addListener(new ListenerConfig("filename.properties", new CallBackLoader() {
-                    public void loadData() {
-                        setField(field, bean, DataStorer.getValue(field.getAnnotation(ValueSetter.class).value()));
+                    public void loadData(Map<String, String> value) {
+                        setField(field, bean, value);
                     }
                 }));
-                setField(field, bean, DataStorer.getValue(field.getAnnotation(ValueSetter.class).value()));
+                setField(field, bean, null);
             }
         }
         return bean;

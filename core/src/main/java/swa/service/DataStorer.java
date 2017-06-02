@@ -1,6 +1,7 @@
 package swa.service;
 
-import com.google.common.collect.Maps;
+import com.alibaba.fastjson.JSONObject;
+import swa.service.RedisUtil;
 
 import java.util.Map;
 
@@ -8,14 +9,13 @@ import java.util.Map;
  * Created by jinyan on 5/26/17.
  */
 public class DataStorer {
-    public static Map<String, Map<String, String>> fileValues = Maps.newConcurrentMap();
 
-    public static Map<String, String> getValue(String fileName) {
-        System.out.println("stored data:" + fileValues);
-        return fileValues.get(fileName);
+    public static Map getValue(String fileName) {
+        System.out.println("stored data:" + fileName);
+        return JSONObject.parseObject(RedisUtil.get(fileName), Map.class);
     }
 
     public static void setValue(String fileName, Map<String, String> value) {
-        fileValues.put(fileName, value);
+        RedisUtil.save(fileName, JSONObject.toJSONString(value));
     }
 }

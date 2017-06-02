@@ -1,11 +1,11 @@
 package swa.service;
 
-import java.lang.reflect.Field;
+import java.util.Map;
 
 /**
  * Created by jinyan on 5/26/17.
  */
 public interface CallBackLoader {
-    void loadData();
+    void loadData(Map<String, String> value);
 
 }

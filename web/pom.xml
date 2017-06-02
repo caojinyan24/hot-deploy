@@ -33,9 +33,15 @@
         <dependency>
             <groupId>swa</groupId>
             <artifactId>hot-load-core</artifactId>
-            <version>1.0-SNAPSHOT</version>
         </dependency>
-
+        <dependency>
+            <groupId>swa</groupId>
+            <artifactId>hot-load-client</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>redis.clients</groupId>
+            <artifactId>jedis</artifactId>
+        </dependency>
     </dependencies>
     <build>
         <finalName>web</finalName>
