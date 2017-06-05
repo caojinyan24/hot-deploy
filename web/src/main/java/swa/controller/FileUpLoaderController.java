@@ -17,6 +17,12 @@ import swa.service.DataUpdater;
 @RequestMapping("swa")
 public class FileUpLoaderController {
 
+    /**
+     * todo 接收数据更新请求，并发送client端的数据更新请求
+     * @param fileName
+     * @param value
+     * @return
+     */
     @RequestMapping("upload")
     public ModelAndView uploadFile(@RequestParam("fileName") String fileName, @RequestParam("value") String value) {
         ModelAndView modelAndView = new ModelAndView("index");
