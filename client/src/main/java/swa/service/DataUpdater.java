@@ -1,10 +1,12 @@
 package swa.service;
 
-import com.alibaba.fastjson.JSONObject;
+import swa.obj.ConfigFile;
 
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 推送&更新数据
@@ -17,17 +19,29 @@ public class DataUpdater {
         listenerConfigList.add(listener);
     }
 
+    private static ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
+
     /**
      * 接收http请求并触发setData方法
-     * @param fileName
      */
-    public static void setData(String fileName) {
-        System.out.println("DataUpdater.setData:" + fileName);
-        for (ListenerConfig config : listenerConfigList) {
-            if (config.getFileName().equals(fileName)) {
-                config.getLoader().loadData(JSONObject.parseObject(RedisUtil.get(fileName), Map.class));
-            }
-        }
+    public static void requestDataOnSchedule() {
+        System.out.println("DataUpdater.setData:");
+        scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
+                                                         public void run() {
+                                                             for (ListenerConfig config : listenerConfigList) {
+                                                                 ConfigFile file = new HttpClient().request(config.getFileName());
+                                                                 if (config.getConfigFile() == null || file.isNewer(config.getConfigFile())) {
+                                                                     config.getLoader().loadData(file.parseFile());
+
+                                                                 }
+                                                             }
+                                                         }
+
+                                                     }
+
+                , 60 * 1000, 60 * 1000, TimeUnit.MILLISECONDS);
+
     }
+
 
 }
