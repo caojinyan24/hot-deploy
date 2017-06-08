@@ -11,10 +11,14 @@ import java.util.Map;
 public class ConfigFile implements Serializable {
     private static final long serialVersionUID = 8762761008727084587L;
     private Integer version;
-    private String content;
+    private Map<String, String> content;
 
-    public Map<String, String> parseFile() {
-        return (Map<String, String>) JSONObject.parseObject(content, Map.class);
+    public ConfigFile() {
+    }
+
+    public ConfigFile(Integer version, Map<String, String> content) {
+        this.version = version;
+        this.content = content;
     }
 
     public Boolean isNewer(ConfigFile configFile) {
@@ -29,11 +33,19 @@ public class ConfigFile implements Serializable {
         this.version = version;
     }
 
-    public String getContent() {
+    public Map<String, String> getContent() {
         return content;
     }
 
-    public void setContent(String content) {
+    public void setContent(Map<String, String> content) {
         this.content = content;
+    }
+
+    @Override
+    public String toString() {
+        return "ConfigFile{" +
+                "version=" + version +
+                ", content=" + content +
+                '}';
     }
 }
