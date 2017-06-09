@@ -11,9 +11,10 @@ public class ListenerConfig {
     CallBackLoader loader;
     String fileName;
 
-    public ListenerConfig(String fileName, CallBackLoader loader) {
+    public ListenerConfig(String fileName, CallBackLoader loader, ConfigFile configFile) {
         this.fileName = fileName;
         this.loader = loader;
+        this.configFile = configFile;
     }
 
     public String getFileName() {
@@ -38,5 +39,13 @@ public class ListenerConfig {
 
     public void setConfigFile(ConfigFile configFile) {
         this.configFile = configFile;
+    }
+
+    @Override
+    public String toString() {
+        return "ListenerConfig{" +
+                "configFile=" + configFile +
+                ", fileName='" + fileName + '\'' +
+                '}';
     }
 }

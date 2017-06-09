@@ -17,7 +17,7 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>getData</servlet-name>
-        <url-pattern>*/getData</url-pattern>
+        <url-pattern>/getData</url-pattern>
     </servlet-mapping>
     <servlet>
         <servlet-name>dispatcher</servlet-name>

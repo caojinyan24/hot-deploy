@@ -11,10 +11,11 @@ import swa.obj.ConfigFile;
 public class DataStorer {
 
     public static ConfigFile getValue(String fileName) {
+        System.out.println("getValue:" + fileName);
         String fileStr = RedisUtil.get(fileName);
         if (Strings.isNullOrEmpty(fileStr)) {
             System.out.println("fileNotExist");
-            return null;
+            return new ConfigFile(1, null, fileName);
         } else {
             return JSONObject.parseObject(RedisUtil.get(fileName), ConfigFile.class);
         }

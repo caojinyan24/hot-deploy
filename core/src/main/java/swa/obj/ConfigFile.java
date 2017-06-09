@@ -1,6 +1,5 @@
 package swa.obj;
 
-import com.alibaba.fastjson.JSONObject;
 
 import java.io.Serializable;
 import java.util.Map;
@@ -12,13 +11,15 @@ public class ConfigFile implements Serializable {
     private static final long serialVersionUID = 8762761008727084587L;
     private Integer version;
     private Map<String, String> content;
+    private String fileName;
 
     public ConfigFile() {
     }
 
-    public ConfigFile(Integer version, Map<String, String> content) {
+    public ConfigFile(Integer version, Map<String, String> content, String fileName) {
         this.version = version;
         this.content = content;
+        this.fileName = fileName;
     }
 
     public Boolean isNewer(ConfigFile configFile) {
@@ -41,11 +42,20 @@ public class ConfigFile implements Serializable {
         this.content = content;
     }
 
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
+
     @Override
     public String toString() {
         return "ConfigFile{" +
                 "version=" + version +
                 ", content=" + content +
+                ", fileName='" + fileName + '\'' +
                 '}';
     }
 }
