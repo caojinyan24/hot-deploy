@@ -28,7 +28,6 @@ public class BeanInitProcessor implements BeanPostProcessor {
                 ConfigFile file = DataStorer.getValue(fileName);
                 DataUpdater.addListener(new ListenerConfig(fileName, new CallBackLoader() {
                     public void loadData(ConfigFile file) {
-                        // TODO: 2017/6/9 本地维护当前使用的文件版本，当版本发生变动之后才做更新
                         setField(field, bean, file.getContent());
                     }
                 }, file));
