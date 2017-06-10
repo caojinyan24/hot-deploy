@@ -10,7 +10,6 @@ import swa.obj.ConfigFile;
  * Created by jinyan.cao on 2017/6/7.
  */
 public class HttpClient {
-    private static String CLIENT_URL = "http://127.0.0.1:8080";
     private static String SERVER_URL = "http://127.0.0.1:8081/getData";
     private static final AsyncHttpClient client;
 

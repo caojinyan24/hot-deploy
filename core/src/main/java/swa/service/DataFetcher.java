@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
+ * 接收获取文件信息的请求
  * Created by jinyan.cao on 2017/6/8.
  */
 public class DataFetcher extends HttpServlet {

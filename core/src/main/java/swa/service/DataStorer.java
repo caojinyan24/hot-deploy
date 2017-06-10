@@ -9,7 +9,6 @@ import swa.obj.ConfigFile;
  * Created by jinyan on 5/26/17.
  */
 public class DataStorer {
-
     public static ConfigFile getValue(String fileName) {
         System.out.println("getValue:" + fileName);
         String fileStr = RedisUtil.get(fileName);

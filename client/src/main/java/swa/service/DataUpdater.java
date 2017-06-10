@@ -45,9 +45,7 @@ public class DataUpdater {
                     System.out.println("requestDataOnSchedule error:" + e);
                 }
             }
-        }, 0, 3, TimeUnit.SECONDS);
+        }, 0, 60, TimeUnit.SECONDS);
 
     }
-
-
 }

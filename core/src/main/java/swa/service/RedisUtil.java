@@ -9,6 +9,7 @@ import redis.clients.jedis.ShardedJedisPool;
 import java.util.List;
 
 /**
+ * redis服务，暂时将文件数据保存在redis中
  * Created by jinyan.cao on 2017/6/2.
  */
 public class RedisUtil {
