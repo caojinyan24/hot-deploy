@@ -26,4 +26,9 @@ public class RedisUtil {
     public static String get(String key) {
         return jedis.get(key);
     }
+
+    public static void main(String[] args) {
+        save("fileName.properties", "");
+        System.out.println(get("fileName.properties"));
+    }
 }

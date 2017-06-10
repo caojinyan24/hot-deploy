@@ -1,8 +1,8 @@
 package swa.service;
 
 import com.alibaba.fastjson.JSONObject;
+import com.google.common.base.Strings;
 import com.ning.http.client.*;
-import com.ning.http.client.multipart.StringPart;
 import swa.obj.ConfigFile;
 
 
@@ -10,8 +10,8 @@ import swa.obj.ConfigFile;
  * Created by jinyan.cao on 2017/6/7.
  */
 public class HttpClient {
-    private static String CLIENT_URL = "http:127.0.0.1:8080";
-    private static String SERVER_URL = "http:127.0.0.1:8081/getData";
+    private static String CLIENT_URL = "http://127.0.0.1:8080";
+    private static String SERVER_URL = "http://127.0.0.1:8081/getData";
     private static final AsyncHttpClient client;
 
     static {
@@ -26,7 +26,8 @@ public class HttpClient {
 
     public ConfigFile request(String fileName) {
         AsyncHttpClient.BoundRequestBuilder requestBuilder = client.preparePost(SERVER_URL);
-        requestBuilder.addBodyPart(new StringPart("fileName", fileName));
+        requestBuilder.addQueryParam("fileName", fileName);
+        requestBuilder.setMethod("GET");
         Request request = requestBuilder.build();
         ListenableFuture<Response> response = client.executeRequest(request);
         return processResponse(response);
@@ -38,6 +39,10 @@ public class HttpClient {
         try {
             Response resp = response.get();
             String respStr = resp.getResponseBody();
+            System.out.println("processResponse-end:" + respStr);
+            if (Strings.isNullOrEmpty(respStr)) {
+                return null;
+            }
             return JSONObject.parseObject(respStr, ConfigFile.class);
         } catch (Exception e) {
             System.out.println("processResponse error" + e);
