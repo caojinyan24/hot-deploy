@@ -37,6 +37,10 @@ public class DataUpdater {
                         System.out.println("loadDataOnSchedule-begin:" + config);
                         ConfigFile file = new HttpClient().request(config.getFileName());
                         System.out.println("loadDataOnSchedule-end:" + file);
+                        if (file == null) {
+                            System.out.println("requestDataOnSchedule get file empty");
+                            return;
+                        }
                         if (config.getConfigFile() == null || file.isNewer(config.getConfigFile())) {
                             config.getLoader().loadData(file);
                         }
@@ -45,7 +49,7 @@ public class DataUpdater {
                     System.out.println("requestDataOnSchedule error:" + e);
                 }
             }
-        }, 0, 60, TimeUnit.SECONDS);
+        }, 0, 5, TimeUnit.SECONDS);
 
     }
 }

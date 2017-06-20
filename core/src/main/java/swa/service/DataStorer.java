@@ -16,6 +16,7 @@ public class DataStorer {
             System.out.println("fileNotExist");
             return new ConfigFile(1, null, fileName);
         } else {
+            System.out.println("getfile:"+fileName+"##value:"+RedisUtil.get(fileName));
             return JSONObject.parseObject(RedisUtil.get(fileName), ConfigFile.class);
         }
 

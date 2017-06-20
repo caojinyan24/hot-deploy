@@ -31,7 +31,6 @@ public class ValueSetterNamespaceHandler extends NamespaceHandlerSupport {
         @Override
         protected void doParse(Element element, BeanDefinitionBuilder builder) {
             if (element.getLocalName().equals("annotation-driven")) {
-//                builder.addPropertyValue("trimValue", Boolean.valueOf(element.getAttribute("trim-value")));
                 return;
             }
 
@@ -52,7 +51,6 @@ public class ValueSetterNamespaceHandler extends NamespaceHandlerSupport {
 
             builder.addPropertyValue("ignoreUnresolvablePlaceholders",
                     Boolean.valueOf(element.getAttribute("ignore-unresolvable")));
-//            builder.addPropertyValue("trimValue", Boolean.valueOf(element.getAttribute("trim-value")));
         }
     }
 
