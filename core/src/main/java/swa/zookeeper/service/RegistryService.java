@@ -1,4 +1,4 @@
-package swa.zookeeper.impl;
+package swa.zookeeper.service;
 
 import org.apache.zookeeper.*;
 import org.apache.zookeeper.data.Stat;
@@ -10,7 +10,7 @@ import java.util.concurrent.CountDownLatch;
  * 做本地服务的zk注册
  * Created by jinyan on 6/17/17.
  */
-public class RegistryServiceImpl {
+public class RegistryService {
     private static final CountDownLatch latch = new CountDownLatch(1);
 
 

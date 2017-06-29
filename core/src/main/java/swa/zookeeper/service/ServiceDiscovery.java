@@ -1,4 +1,4 @@
-package swa.zookeeper.impl;
+package swa.zookeeper.service;
 
 import com.google.common.collect.Lists;
 import org.apache.zookeeper.WatchedEvent;
@@ -6,31 +6,28 @@ import org.apache.zookeeper.Watcher;
 import org.apache.zookeeper.ZooKeeper;
 import org.springframework.util.CollectionUtils;
 import swa.zookeeper.Constant;
-import swa.zookeeper.ServiceDiscovery;
-
-import java.net.InetAddress;
 import java.util.*;
 import java.util.concurrent.CountDownLatch;
 
 /**
  * Created by jinyan on 6/19/17.
  */
-public class ServiceDiscoveryImpl {
+public class ServiceDiscovery {
     private static ZooKeeper zk;
     private static final CountDownLatch latch = new CountDownLatch(1);
     private List<String> serverList = Lists.newArrayList();//记得初始化--空指针
-    private static ServiceDiscoveryImpl instance = null;//todo 做同步
+    private static ServiceDiscovery instance = null;//todo 做同步
 
-    public static ServiceDiscoveryImpl getInstance() {
+    public static ServiceDiscovery getInstance() {
         if (instance == null) {
-            instance = new ServiceDiscoveryImpl("127.0.0.1:8081");
+            instance = new ServiceDiscovery("127.0.0.1:8081");
         }
         return instance;
     }
 
-    private ServiceDiscoveryImpl(String data) {
+    private ServiceDiscovery(String data) {
         try {
-            RegistryServiceImpl.register(data);//todo：
+            RegistryService.register(data);//todo：
             zk = new ZooKeeper(Constant.ZK_REGISTRY_PATH, Constant.ZK_SESSION_TIMEOUT, new Watcher() {
                 public void process(WatchedEvent event) {
                     //zookeeper处于同步连通的状态时

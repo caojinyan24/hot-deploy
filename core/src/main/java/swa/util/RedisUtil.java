@@ -1,4 +1,4 @@
-package swa.service;
+package swa.util;
 
 import com.google.common.collect.Lists;
 import redis.clients.jedis.JedisPoolConfig;
