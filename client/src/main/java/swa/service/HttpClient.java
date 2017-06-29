@@ -1,18 +1,20 @@
 package swa.service;
 
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.JSON;
 import com.google.common.base.Strings;
 import com.ning.http.client.*;
 import swa.obj.ConfigFile;
-import swa.zookeeper.service.ServiceDiscovery;
+import swa.zookeeper.ServiceDiscovery;
 
 
 /**
  * Created by jinyan.cao on 2017/6/7.
  */
-public class HttpClient {
-    private static String SERVER_URL = "http://127.0.0.1:8081/getData";
+public final class HttpClient {
     private static final AsyncHttpClient client;
+
+    private HttpClient() {
+    }
 
     static {
         AsyncHttpClientConfig.Builder builder = new AsyncHttpClientConfig.Builder();
@@ -24,7 +26,7 @@ public class HttpClient {
         client = new AsyncHttpClient(builder.build());
     }
 
-    public ConfigFile request(String fileName) {
+    public static ConfigFile request(String fileName) {
         String serverIp = ServiceDiscovery.getInstance().getServerAddress();
         System.out.println("get server ip:" + serverIp);
         if (Strings.isNullOrEmpty(serverIp)) {
@@ -36,13 +38,14 @@ public class HttpClient {
         requestBuilder.setMethod("GET");
         requestBuilder.setRequestTimeout(1000);
         Request request = requestBuilder.build();
+        System.out.println("request param:" + request);
         ListenableFuture<Response> response = client.executeRequest(request);
         return processResponse(response);
 
 
     }
 
-    private ConfigFile processResponse(ListenableFuture<Response> response) {
+    private static ConfigFile processResponse(ListenableFuture<Response> response) {
         try {
             Response resp = response.get();
             String respStr = resp.getResponseBody();
@@ -50,7 +53,7 @@ public class HttpClient {
             if (Strings.isNullOrEmpty(respStr)) {
                 return null;
             }
-            return JSONObject.parseObject(respStr, ConfigFile.class);
+            return JSON.parseObject(respStr, ConfigFile.class);
         } catch (Exception e) {
             System.out.println("processResponse error" + e);
             return null;

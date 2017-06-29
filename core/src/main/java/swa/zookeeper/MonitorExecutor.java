@@ -1,72 +1,34 @@
 package swa.zookeeper;
+/**
+ * A simple example program to use DataMonitor to start and
+ * stop executables based on a znode. The program watches the
+ * specified znode and saves the data that corresponds to the
+ * znode in the filesystem. It also starts the specified program
+ * with the specified arguments when the znode exists and kills
+ * the program if the znode goes away.
+ */
 
-import com.google.common.collect.Lists;
-import com.google.common.io.Resources;
 import org.apache.zookeeper.KeeperException;
 import org.apache.zookeeper.WatchedEvent;
 import org.apache.zookeeper.Watcher;
 import org.apache.zookeeper.ZooKeeper;
+
 
 import java.io.*;
 
 /**
  * Created by jinyan on 6/15/17.
  */
-public class MonitorExecutor implements Watcher, Runnable, DataMonitor.DataMonitorLisener {
-    String znode = Constant.ZK_REGISTRY_PATH;
-    String host = "127.0.0.1";
-    String port = "2181";
-
+public class MonitorExecutor implements Watcher, Runnable, DataMonitor.DataMonitorListener {
     DataMonitor dm;
 
     ZooKeeper zk;
 
     String filename;
 
-    String exec[] ;
+    String exec[];
 
     Process child;
-//    private static ZooKeeper zk = null;
-//    private static String znode = "";
-//    private static AtomicBoolean isIniting = new AtomicBoolean(Boolean.FALSE);
-//    private static Properties property = new Properties();
-//    private static Process child;
-//
-//    static {
-//        try {
-//            property.load(new FileReader(Resources.getResource("zookeeper.properties").toString()));
-//            zk = new ZooKeeper(property.getProperty("serverList"), 1000, new Watcher() {
-//                public void process(WatchedEvent event) {
-//                    processWatcher(event);
-//                }
-//            });
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
-//
-//    //初始化zk连接
-//    public static void init() {
-//        try {
-//            if (zk == null || !zk.getState().isAlive()) {
-//                synchronized (isIniting) {
-//                    if (zk == null || !zk.getState().isAlive()) {
-//                        zk.close();
-//                        zk = new ZooKeeper(property.getProperty("serverList"), 1000, new Watcher() {
-//                            public void process(WatchedEvent event) {
-//                                processWatcher(event);
-//                            }
-//                        });
-//                    }
-//                }
-//            }
-//        } catch (Exception e) {
-//            System.out.println("ClientRegister.init error" + e);
-//        }
-//    }
-//
-//
-//
 
     public MonitorExecutor(String hostPort, String znode, String filename,
                            String exec[]) throws KeeperException, IOException {
@@ -76,23 +38,12 @@ public class MonitorExecutor implements Watcher, Runnable, DataMonitor.DataMonit
         dm = new DataMonitor(zk, znode, null, this);
     }
 
-    /**
-     * @param args
-     */
-    public static void main(String[] args) {
-        args=Lists.newArrayList("127.0.0.1", "/zk_node", Resources.getResource("zookeeper.properties").toString(),"start","abc").toArray(args);
 
-
-        if (args.length < 4) {
-            System.err
-                    .println("USAGE: Executor hostPort znode filename program [args ...]");
-            System.exit(2);
-        }
-        String hostPort = args[0];
-        String znode = args[1];
-        String filename = args[2];
-        String exec[] = new String[args.length-3];
-        System.arraycopy(args, 3, exec, 0, exec.length);
+    static {
+        String hostPort = Constant.ZK_REGISTRY_PATH;
+        String znode = Constant.ZK_DATA_PATH;
+        String filename = Constant.MONITOR_FILE;
+        String exec[] = new String[1];
         try {
             new MonitorExecutor(hostPort, znode, filename, exec).run();
         } catch (Exception e) {
@@ -100,6 +51,11 @@ public class MonitorExecutor implements Watcher, Runnable, DataMonitor.DataMonit
         }
     }
 
+    /***************************************************************************
+     * We do process any events ourselves, we just need to forward them on.
+     *
+     * @see org.apache.zookeeper.Watcher# (org.apache.zookeeper.proto.WatcherEvent)
+     */
     public void process(WatchedEvent event) {
         dm.process(event);
     }

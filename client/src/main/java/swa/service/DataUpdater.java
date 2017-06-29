@@ -38,7 +38,7 @@ public final class DataUpdater {
                 try {
                     for (ListenerConfig config : listenerConfigList) {
                         System.out.println("loadDataOnSchedule-begin:" + config);
-                        ConfigFile file = new HttpClient().request(config.getFileName());
+                        ConfigFile file = HttpClient.request(config.getFileName());
                         System.out.println("loadDataOnSchedule-end:" + file);
                         if (file == null) {
                             System.out.println("requestDataOnSchedule get file empty");

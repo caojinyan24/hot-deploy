@@ -1,13 +1,15 @@
-package swa.zookeeper.service;
+package swa.zookeeper;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import org.apache.zookeeper.WatchedEvent;
 import org.apache.zookeeper.Watcher;
 import org.apache.zookeeper.ZooKeeper;
 import org.springframework.util.CollectionUtils;
-import swa.zookeeper.Constant;
+
 import java.util.*;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Created by jinyan on 6/19/17.
@@ -15,20 +17,26 @@ import java.util.concurrent.CountDownLatch;
 public class ServiceDiscovery {
     private static ZooKeeper zk;
     private static final CountDownLatch latch = new CountDownLatch(1);
-    private List<String> serverList = Lists.newArrayList();//记得初始化--空指针
-    private static ServiceDiscovery instance = null;//todo 做同步
+    private Set<String> serverList = Sets.newCopyOnWriteArraySet();
+    private static ServiceDiscovery instance;
+    private static AtomicBoolean isInited = new AtomicBoolean(Boolean.FALSE);
 
     public static ServiceDiscovery getInstance() {
-        if (instance == null) {
-            instance = new ServiceDiscovery(Constant.SERVER_ADDRESS);
+        if (!isInited.get()) {
+            if (instance == null) {
+                RegistryService.setUp();//todo:优化下
+                instance = new ServiceDiscovery();
+            }
+            isInited.compareAndSet(Boolean.FALSE, Boolean.TRUE);
+            return instance;
+        } else {
+            return instance;
         }
-        return instance;
     }
 
-    private ServiceDiscovery(String data) {
+    private ServiceDiscovery() {
         try {
-            RegistryService.register(data);//todo：考虑怎么实现在系统初始加载的时候做初始化
-            zk = new ZooKeeper(Constant.REGISTRY_ADDRESS, Constant.ZK_SESSION_TIMEOUT, new Watcher() {
+            zk = new ZooKeeper(Constant.SERVER_REGISTRY_ADDRESS, Constant.ZK_SESSION_TIMEOUT, new Watcher() {
                 public void process(WatchedEvent event) {
                     //zookeeper处于同步连通的状态时
                     if (event.getState() == Event.KeeperState.SyncConnected) {
@@ -53,7 +61,7 @@ public class ServiceDiscovery {
         if (CollectionUtils.isEmpty(serverList)) {
             return null;
         }
-        String serverAddress = serverList.get(new Random(System.currentTimeMillis()).nextInt(serverList.size()));
+        String serverAddress = Lists.newArrayList(serverList).get(new Random(System.currentTimeMillis()).nextInt(serverList.size()));
         System.out.println("final address:" + serverAddress);
         return serverAddress;
 

@@ -1,25 +1,21 @@
-package swa.zookeeper.service;
+package swa.zookeeper;
 
+import com.google.common.base.Strings;
 import org.apache.zookeeper.*;
 import org.apache.zookeeper.data.Stat;
-import swa.zookeeper.Constant;
-
 import java.util.concurrent.CountDownLatch;
 
 /**
  * 做本地服务的zk注册
  * Created by jinyan on 6/17/17.
  */
-public class RegistryService {
+public final class RegistryService {
     private static final CountDownLatch latch = new CountDownLatch(1);
 
-    private RegistryService() {
-    }
 
-
-    //注册到zk中，其中data为服务端的 ip:port
-    public static void register(String data) {//注册完成之后，创建一个新的zk节点
-        if (data != null) {
+    public static void setUp(){//注册完成之后，创建一个新的zk节点    //注册到zk中，其中data为服务端的 ip:port
+        String data = Constant.SERVER_LIST;
+        if (!Strings.isNullOrEmpty(data)) {
             ZooKeeper zk = connectServer();//获取一个client
             if (zk != null) {
                 addRootNode(zk);
@@ -28,7 +24,6 @@ public class RegistryService {
         }
     }
 
-    //todo  自动在程序里添加节点
     private static void addRootNode(ZooKeeper zk) {
         Stat s = null;
         try {
@@ -46,9 +41,9 @@ public class RegistryService {
     private static ZooKeeper connectServer() {
         ZooKeeper zk = null;
         try {
-            zk = new ZooKeeper(Constant.REGISTRY_ADDRESS, Constant.ZK_SESSION_TIMEOUT, new Watcher() {
+            zk = new ZooKeeper(Constant.SERVER_REGISTRY_ADDRESS, Constant.ZK_SESSION_TIMEOUT, new Watcher() {
                 public void process(WatchedEvent event) {
-                    if (event.getState() == Watcher.Event.KeeperState.SyncConnected) {//当client是connected状态时，其中一个server发送这个event。
+                    if (event.getState() == Watcher.Event.KeeperState.SyncConnected) {
                         latch.countDown();
                     }
                 }
