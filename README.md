@@ -16,3 +16,4 @@ client连接：
 提供watcher服务
 
 
+client端和zookeeper断开连接后，去掉节点数据（实现自动下线服务）
