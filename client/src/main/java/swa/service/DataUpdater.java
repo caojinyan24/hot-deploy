@@ -9,13 +9,16 @@ import java.util.concurrent.*;
  * 推送&更新数据
  * Created by jinyan on 5/25/17.
  */
-public class DataUpdater {
-    private static List<ListenerConfig> listenerConfigList = new CopyOnWriteArrayList<ListenerConfig>();
-    private static ScheduledExecutorService scheduledExecutorService;
+public final class DataUpdater {
+    private static final List<ListenerConfig> listenerConfigList = new CopyOnWriteArrayList<ListenerConfig>();
+    private static final ScheduledExecutorService scheduledExecutorService;
 
     static {//初始化时执行定时调度
         scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
         requestDataOnSchedule();
+    }
+
+    private DataUpdater() {
     }
 
 

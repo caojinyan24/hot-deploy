@@ -20,15 +20,15 @@ public class ServiceDiscovery {
 
     public static ServiceDiscovery getInstance() {
         if (instance == null) {
-            instance = new ServiceDiscovery("127.0.0.1:8081");
+            instance = new ServiceDiscovery(Constant.SERVER_ADDRESS);
         }
         return instance;
     }
 
     private ServiceDiscovery(String data) {
         try {
-            RegistryService.register(data);//todo：
-            zk = new ZooKeeper(Constant.ZK_REGISTRY_PATH, Constant.ZK_SESSION_TIMEOUT, new Watcher() {
+            RegistryService.register(data);//todo：考虑怎么实现在系统初始加载的时候做初始化
+            zk = new ZooKeeper(Constant.REGISTRY_ADDRESS, Constant.ZK_SESSION_TIMEOUT, new Watcher() {
                 public void process(WatchedEvent event) {
                     //zookeeper处于同步连通的状态时
                     if (event.getState() == Event.KeeperState.SyncConnected) {
@@ -61,15 +61,15 @@ public class ServiceDiscovery {
 
     public void watchNode(final ZooKeeper zk) {
         try {
-            List<String> nodeLIst = zk.getChildren(Constant.ZK_REGISTRY_PATH, new Watcher() {
+            List<String> nodeList = zk.getChildren(Constant.ZK_REGISTRY_PATH, new Watcher() {
                 public void process(WatchedEvent event) {
                     if (event.getType() == Event.EventType.NodeChildrenChanged) {
                         watchNode(zk);
                     }
                 }
             });
-            System.out.println("watchNode-getNode:" + nodeLIst);
-            for (String node : nodeLIst) {
+            System.out.println("watchNode-getNode:" + nodeList);
+            for (String node : nodeList) {
                 byte[] bytes = zk.getData(Constant.ZK_REGISTRY_PATH + '/' + node, false, null);
                 System.out.println("bytes:" + bytes);
                 serverList.add(new String(bytes));
@@ -80,5 +80,8 @@ public class ServiceDiscovery {
             System.out.println("watchNode error:" + e);
         }
     }
+
+
+
 }
 // TODO: 6/19/17 有没有不用static的

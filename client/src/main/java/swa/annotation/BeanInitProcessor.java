@@ -4,7 +4,7 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import swa.obj.ConfigFile;
 import swa.service.CallBackLoader;
-import swa.service.DataStorer;
+//import swa.service.DataStorer;
 import swa.service.DataUpdater;
 import swa.service.ListenerConfig;
 
@@ -25,14 +25,14 @@ public class BeanInitProcessor implements BeanPostProcessor {
         for (final Field field : fields) {
             if (field.getAnnotation(ValueSetter.class) != null) {
                 String fileName = field.getAnnotation(ValueSetter.class).value();
-                ConfigFile file = DataStorer.getValue(fileName);
+//                ConfigFile file = DataStorer.getValue(fileName);
                 DataUpdater.addListener(new ListenerConfig(fileName, new CallBackLoader() {
                     public void loadData(ConfigFile file) {
                         setField(field, bean, file.getContent());
                     }
-                }, file));
-                System.out.println("postProcessAfterInitialization" + DataStorer.getValue(fileName));
-                setField(field, bean, file.getContent());
+                }, null));
+                System.out.println("postProcessAfterInitialization" + null);
+                setField(field, bean, null);
             }
         }
 

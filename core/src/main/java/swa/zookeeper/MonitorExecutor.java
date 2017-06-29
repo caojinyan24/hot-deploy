@@ -13,7 +13,7 @@ import java.io.*;
  * Created by jinyan on 6/15/17.
  */
 public class MonitorExecutor implements Watcher, Runnable, DataMonitor.DataMonitorLisener {
-    String znode = "/zk_node";
+    String znode = Constant.ZK_REGISTRY_PATH;
     String host = "127.0.0.1";
     String port = "2181";
 

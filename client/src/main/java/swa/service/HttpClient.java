@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.google.common.base.Strings;
 import com.ning.http.client.*;
 import swa.obj.ConfigFile;
-import swa.zookeeper.impl.ServiceDiscoveryImpl;
+import swa.zookeeper.service.ServiceDiscovery;
 
 
 /**
@@ -25,7 +25,7 @@ public class HttpClient {
     }
 
     public ConfigFile request(String fileName) {
-        String serverIp = ServiceDiscoveryImpl.getInstance().getServerAddress();
+        String serverIp = ServiceDiscovery.getInstance().getServerAddress();
         System.out.println("get server ip:" + serverIp);
         if (Strings.isNullOrEmpty(serverIp)) {
             throw new RuntimeException("get server address error");
@@ -34,6 +34,7 @@ public class HttpClient {
         AsyncHttpClient.BoundRequestBuilder requestBuilder = client.preparePost(url);
         requestBuilder.addQueryParam("fileName", fileName);
         requestBuilder.setMethod("GET");
+        requestBuilder.setRequestTimeout(1000);
         Request request = requestBuilder.build();
         ListenableFuture<Response> response = client.executeRequest(request);
         return processResponse(response);

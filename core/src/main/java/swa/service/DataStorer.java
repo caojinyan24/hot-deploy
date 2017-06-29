@@ -3,6 +3,7 @@ package swa.service;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.base.Strings;
 import swa.obj.ConfigFile;
+import swa.util.RedisUtil;
 
 /**
  * 保存/取用数据

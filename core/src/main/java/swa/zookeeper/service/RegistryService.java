@@ -13,6 +13,9 @@ import java.util.concurrent.CountDownLatch;
 public class RegistryService {
     private static final CountDownLatch latch = new CountDownLatch(1);
 
+    private RegistryService() {
+    }
+
 
     //注册到zk中，其中data为服务端的 ip:port
     public static void register(String data) {//注册完成之后，创建一个新的zk节点
@@ -43,13 +46,13 @@ public class RegistryService {
     private static ZooKeeper connectServer() {
         ZooKeeper zk = null;
         try {
-            zk = new ZooKeeper(Constant.ZK_REGISTRY_PATH, Constant.ZK_SESSION_TIMEOUT, new Watcher() {
+            zk = new ZooKeeper(Constant.REGISTRY_ADDRESS, Constant.ZK_SESSION_TIMEOUT, new Watcher() {
                 public void process(WatchedEvent event) {
-                    if (event.getState() == Watcher.Event.KeeperState.SyncConnected) {
+                    if (event.getState() == Watcher.Event.KeeperState.SyncConnected) {//当client是connected状态时，其中一个server发送这个event。
                         latch.countDown();
                     }
                 }
-            });
+            });//当zookeeper连接成功后，会发送event消息，接收到连接成功的消息之后，latch减1，否则阻塞线程。也就是说，在连接未成功之前，会一直阻塞线程，不会执行后续操作。
             latch.await();
         } catch (Exception e) {
             System.out.println("connectServer error:" + e);
@@ -59,13 +62,14 @@ public class RegistryService {
 
     private static void createNode(ZooKeeper zk, String data) {
         try {
-            byte[] bytes = data.getBytes();
+            byte[] bytes = data.getBytes();//加入节点的数据
             String path = zk.create(Constant.ZK_DATA_PATH, bytes, ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.EPHEMERAL_SEQUENTIAL);
             System.out.println("create zookeeper node path:" + path + " data:" + data);
         } catch (Exception e) {
             System.out.println("createNode error:" + e);
         }
     }
-
+//ZooDefs.Ids.OPEN_ACL_UNSAFE：可做任何操作（读，写，添加，删除，管理），无权限控制
+    //CreateMode.EPHEMERAL_SEQUENTIAL：当连接中断时，这个数据会被删除，同时这个节点的名称后会加一个递增的数字（保证节点数据的唯一性）
 
 }

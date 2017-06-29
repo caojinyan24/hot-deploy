@@ -9,8 +9,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import swa.obj.ConfigFile;
 import swa.service.DataStorer;
-import swa.service.RedisUtil;
+import swa.util.RedisUtil;
 
+import javax.annotation.Resource;
 import java.util.Map;
 
 
