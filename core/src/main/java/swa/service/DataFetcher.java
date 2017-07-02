@@ -1,6 +1,6 @@
 package swa.service;
 
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.JSON;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -17,7 +17,7 @@ public class DataFetcher extends HttpServlet {
     public void doGet(HttpServletRequest req, HttpServletResponse resp) {
         String fileName = req.getParameter("fileName");// TODO: 2017/6/9
         try {
-            resp.getWriter().write(JSONObject.toJSONString(DataStorer.getValue(fileName)));
+            resp.getWriter().write(JSON.toJSONString(DataStorer.getValue(fileName)));
             resp.setStatus(200);
             resp.setHeader("fileName", fileName);
             resp.flushBuffer();

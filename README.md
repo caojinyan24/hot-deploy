@@ -25,3 +25,4 @@ client端和zookeeper断开连接后，去掉节点数据（实现自动下线�
 当client重启后，zookeeper重新注册节点，但获取数据的时候，依旧是null（通过命令行删除节点，但client端的节点数据没有更新）
 
 
+client端通过获得zookeeper连接取得节点数据，即请求服务器地址（无需保存在redis中）

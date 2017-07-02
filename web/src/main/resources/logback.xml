@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<configuration scan="true" scanPeriod="2 seconds">
+
+    <!-- 文件输出日志 (文件大小策略进行文件输出，超过指定大小对文件备份)-->
+    <appender name="FILE" class="ch.qos.logback.core.ConsoleAppender">
+        <File>${catalina.base}/log/hot-deploy.log</File>
+        <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+            <FileNamePattern>hot-deploy.log.%i.bak</FileNamePattern>
+            <MinIndex>1</MinIndex>
+            <MaxIndex>12</MaxIndex>
+        </rollingPolicy>
+        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+            <MaxFileSize>100MB</MaxFileSize>
+        </triggeringPolicy>
+        <encoder>
+            <Pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</Pattern>
+        </encoder>
+    </appender>
+
+    <root level="DEBUG">
+        <appender-ref ref="FILE"/>
+    </root>
+</configuration>

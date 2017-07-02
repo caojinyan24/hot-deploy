@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<xsd:schema xmlns="http://localhost/schema/valueSetter"
-            xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns="http://localhost/schema/valueSetter"
             targetNamespace="http://localhost/schema/valueSetter"
             elementFormDefault="qualified"
             attributeFormDefault="unqualified">

@@ -3,6 +3,8 @@ package swa.service;
 import com.alibaba.fastjson.JSON;
 import com.google.common.base.Strings;
 import com.ning.http.client.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import swa.obj.ConfigFile;
 import swa.zookeeper.ServiceDiscovery;
 
@@ -12,9 +14,8 @@ import swa.zookeeper.ServiceDiscovery;
  */
 public final class HttpClient {
     private static final AsyncHttpClient client;
-
-    private HttpClient() {
-    }
+    private static final ServiceDiscovery instance = ServiceDiscovery.getInstance();
+    private static Logger logger = LoggerFactory.getLogger(HttpClient.class);
 
     static {
         AsyncHttpClientConfig.Builder builder = new AsyncHttpClientConfig.Builder();
@@ -26,9 +27,12 @@ public final class HttpClient {
         client = new AsyncHttpClient(builder.build());
     }
 
+    private HttpClient() {
+    }
+
     public static ConfigFile request(String fileName) {
-        String serverIp = ServiceDiscovery.getInstance().getServerAddress();
-        System.out.println("get server ip:" + serverIp);
+        String serverIp = DataStorer.getServerAddress();
+        logger.info("get server ip:{}", serverIp);
         if (Strings.isNullOrEmpty(serverIp)) {
             throw new RuntimeException("get server address error");
         }
@@ -38,7 +42,7 @@ public final class HttpClient {
         requestBuilder.setMethod("GET");
         requestBuilder.setRequestTimeout(1000);
         Request request = requestBuilder.build();
-        System.out.println("request param:" + request);
+        logger.debug("request param:{}", request);
         ListenableFuture<Response> response = client.executeRequest(request);
         return processResponse(response);
 
@@ -49,13 +53,12 @@ public final class HttpClient {
         try {
             Response resp = response.get();
             String respStr = resp.getResponseBody();
-            System.out.println("processResponse-end:" + respStr);
             if (Strings.isNullOrEmpty(respStr)) {
                 return null;
             }
             return JSON.parseObject(respStr, ConfigFile.class);
         } catch (Exception e) {
-            System.out.println("processResponse error" + e);
+            logger.error("processResponse error", e);
             return null;
         }
     }

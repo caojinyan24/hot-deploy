@@ -1,8 +1,10 @@
 package swa.controller;
 
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.JSON;
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableMap;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -11,7 +13,6 @@ import swa.obj.ConfigFile;
 import swa.service.DataStorer;
 import swa.util.RedisUtil;
 
-import javax.annotation.Resource;
 import java.util.Map;
 
 
@@ -22,6 +23,8 @@ import java.util.Map;
 @Controller
 @RequestMapping("swa")
 public class FileUpLoaderController {
+    private static Logger logger = LoggerFactory.getLogger(FileUpLoaderController.class);
+
 
     /**
      * todo 接收数据更新请求，并发送client端的数据更新请求
@@ -41,12 +44,12 @@ public class FileUpLoaderController {
         if (Strings.isNullOrEmpty(file)) {
             configFile = new ConfigFile(1, storedValue, fileName);
         } else {
-            configFile = JSONObject.parseObject(file, ConfigFile.class);
+            configFile = JSON.parseObject(file, ConfigFile.class);
             configFile.setContent(storedValue);
             configFile.setVersion(configFile.getVersion() + 1);
         }
         DataStorer.setValue(fileName, configFile);
-        System.out.println("store data:" + fileName + "##" + value);
+        logger.info("upload data:{},{}", file, configFile);
         return modelAndView;
     }
 }
