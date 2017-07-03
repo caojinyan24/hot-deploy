@@ -44,7 +44,7 @@ public class BeanInitProcessor implements BeanPostProcessor {
             field.setAccessible(true);
             field.set(bean, map);
         } catch (IllegalAccessException e) {
-            e.printStackTrace();
+            logger.error("setField error:",e);
         }
 
     }

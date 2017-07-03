@@ -45,11 +45,7 @@ public class ServerWatcher implements Watcher, Runnable {
             logger.error("init server watcher error:", e);
         }
     }
-
-    public static void main(String[] args) {
-        RegistryService.setUp();
-        new ServerWatcher().run();
-    }
+    
 
     public void process(WatchedEvent event) {//event关联了变动节点对应的client。当client的session过期，event会报session过期相关异常
         try {
@@ -58,7 +54,7 @@ public class ServerWatcher implements Watcher, Runnable {
                 return;
             }
             switch (event.getType()) {// TODO: 6/30/17
-                case NodeDeleted:
+                case NodeDeleted://// TODO: 7/3/17 修改节点数据？ 
                     ServiceDiscovery.getInstance().getAppServerMap().clear();
                     break;
                 case NodeDataChanged:
@@ -94,14 +90,12 @@ public class ServerWatcher implements Watcher, Runnable {
         }
     }
 
-    public void run() {
-        synchronized (this) {//获取对象锁
-            while (!isClosed) {
-                try {
-                    wait();
-                } catch (Exception e) {
-                    logger.error("run error:", e);
-                }
+    public synchronized void run() {
+        while (!isClosed) {
+            try {
+                wait();
+            } catch (Exception e) {
+                logger.error("run error:", e);
             }
         }
     }

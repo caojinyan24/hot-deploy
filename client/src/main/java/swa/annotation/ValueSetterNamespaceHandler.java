@@ -11,7 +11,6 @@ import org.w3c.dom.Element;
  */
 public class ValueSetterNamespaceHandler extends NamespaceHandlerSupport {
     public void init() {
-        System.out.printf("ValueSetterNamespaceHandler.init");
         registerBeanDefinitionParser("config", new Parser());
         registerBeanDefinitionParser("annotation-driven", new Parser());
     }

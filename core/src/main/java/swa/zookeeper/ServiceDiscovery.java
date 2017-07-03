@@ -42,10 +42,8 @@ public class ServiceDiscovery {
         if (!isInited.get()) {
             if (instance == null) {
                 instance = new ServiceDiscovery();
-                System.out.printf("ServerMap:" + appServerMap);
             }
             isInited.compareAndSet(Boolean.FALSE, Boolean.TRUE);
-            System.out.printf("ServerMap1:" + appServerMap);
         }
         return instance;
 
@@ -55,4 +53,3 @@ public class ServiceDiscovery {
         return appServerMap;
     }
 }
-// TODO: 6/19/17 有没有不用static的
