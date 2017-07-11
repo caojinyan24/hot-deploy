@@ -18,6 +18,7 @@ public final class DataUpdater {
     private static final Logger logger = LoggerFactory.getLogger(DataUpdater.class);
     private static final List<ListenerConfig> listenerConfigList = new CopyOnWriteArrayList<ListenerConfig>();
     private static final ScheduledExecutorService scheduledExecutorService;
+    private static final Integer TIME_SLOT=60;//取值时间间隔
 
     static {//初始化时执行定时调度
         scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
@@ -55,7 +56,7 @@ public final class DataUpdater {
                     logger.error("requestDataOnSchedule error:", e);
                 }
             }
-        }, 0, 5, TimeUnit.SECONDS);
+        }, 0, TIME_SLOT, TimeUnit.SECONDS);
 
     }
 }
