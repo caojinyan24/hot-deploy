@@ -6,13 +6,14 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import swa.obj.ConfigFile;
 import swa.service.CallBackLoader;
-import swa.service.DataUpdater;
+import swa.service.DataSetterService;
 import swa.service.ListenerConfig;
 
 import java.lang.reflect.Field;
 import java.util.Map;
 
 /**
+ * 程序启动时对相关域或方法做注入
  * Created by jinyan on 5/25/17.
  */
 public class BeanInitProcessor implements BeanPostProcessor {
@@ -27,12 +28,11 @@ public class BeanInitProcessor implements BeanPostProcessor {
         for (final Field field : fields) {
             if (field.getAnnotation(ValueSetter.class) != null) {
                 String fileName = field.getAnnotation(ValueSetter.class).value();
-                DataUpdater.addListener(new ListenerConfig(fileName, new CallBackLoader() {
+                DataSetterService.addListener(new ListenerConfig(fileName, new CallBackLoader() {
                     public void loadData(ConfigFile file) {
                         setField(field, bean, file.getContent());
                     }
                 }, null));
-                setField(field, bean, null);
             }
         }
 
@@ -44,7 +44,7 @@ public class BeanInitProcessor implements BeanPostProcessor {
             field.setAccessible(true);
             field.set(bean, map);
         } catch (IllegalAccessException e) {
-            logger.error("setField error:",e);
+            logger.error("setField error:", e);
         }
 
     }

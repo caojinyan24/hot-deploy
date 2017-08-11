@@ -12,7 +12,7 @@
     </listener>
     <servlet>
         <servlet-name>getData</servlet-name>
-        <servlet-class>swa.service.DataFetcher</servlet-class>
+        <servlet-class>swa.service.HttpServerService</servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
     <servlet-mapping>

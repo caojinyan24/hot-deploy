@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import swa.obj.ConfigFile;
-import swa.service.DataStorer;
-import swa.util.RedisUtil;
+import swa.service.DataStorerService;
+import swa.service.RedisUtil;
 
 import java.util.Map;
 
@@ -25,9 +25,8 @@ import java.util.Map;
 public class FileUpLoaderController {
     private static Logger logger = LoggerFactory.getLogger(FileUpLoaderController.class);
 
-
     /**
-     * todo 接收数据更新请求，并发送client端的数据更新请求
+     * 简化版页面，做文件的更新操作
      *
      * @param fileName
      * @param value
@@ -48,7 +47,7 @@ public class FileUpLoaderController {
             configFile.setContent(storedValue);
             configFile.setVersion(configFile.getVersion() + 1);
         }
-        DataStorer.setValue(fileName, configFile);
+        DataStorerService.setValue(fileName, configFile);
         logger.info("upload data:{},{}", file, configFile);
         return modelAndView;
     }

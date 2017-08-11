@@ -3,19 +3,19 @@ package swa.service;
 import com.alibaba.fastjson.JSON;
 import com.google.common.base.Strings;
 import com.ning.http.client.*;
+import org.apache.zookeeper.KeeperException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import swa.obj.ConfigFile;
-import swa.zookeeper.ServiceDiscovery;
+import swa.zookeeper.ZKService;
 
 
 /**
  * Created by jinyan.cao on 2017/6/7.
  */
-public final class HttpClient {
+public final class HttpClientService {
     private static final AsyncHttpClient client;
-    private static final ServiceDiscovery instance = ServiceDiscovery.getInstance();
-    private static Logger logger = LoggerFactory.getLogger(HttpClient.class);
+    private static Logger logger = LoggerFactory.getLogger(HttpClientService.class);
 
     static {
         AsyncHttpClientConfig.Builder builder = new AsyncHttpClientConfig.Builder();
@@ -27,11 +27,11 @@ public final class HttpClient {
         client = new AsyncHttpClient(builder.build());
     }
 
-    private HttpClient() {
+    private HttpClientService() {
     }
 
-    public static ConfigFile request(String fileName) {
-        String serverIp = DataStorer.getServerAddress();
+    public static ConfigFile requestFile(String fileName) throws KeeperException, InterruptedException {
+        String serverIp = ZKService.getServer();
         logger.info("get server ip:{}", serverIp);
         if (Strings.isNullOrEmpty(serverIp)) {
             throw new RuntimeException("get server address error");

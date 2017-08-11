@@ -5,6 +5,7 @@ import java.io.Serializable;
 import java.util.Map;
 
 /**
+ * 配置文件封装类
  * Created by jinyan.cao on 2017/6/7.
  */
 public class ConfigFile implements Serializable {
